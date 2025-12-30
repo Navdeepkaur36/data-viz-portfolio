@@ -1,0 +1,169 @@
+---
+title: "Task 2: Grammar of Graphics"
+---
+
+## Core Concept
+
+The Grammar of Graphics formalises visualisation through layered, independent components [@wilkinson2011grammar]. Rather than memorising chart types, we compose graphics from building blocks: data, aesthetics, geometries, statistics, scales, coordinates, facets, and themes [@wickham2016ggplot2].
+
+## Aesthetics: Visual Encoding
+
+Aesthetics map data variables to visual properties. Position is most effective for numeric comparison. Colour distinguishes categories. Size represents magnitude. Shape identifies groups.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Show how mtcars data is structured
+str(mtcars)
+head(mtcars)
+```
+
+### Aesthetics Example
+
+```{r}
+# Map different variables to aesthetics
+ggplot(mtcars, aes(x = wt, y = mpg, colour = factor(cyl), size = hp)) +
+  geom_point(alpha = 0.6) +
+  scale_colour_brewer(palette = "Set1", name = "Cylinders") +
+  scale_size_continuous(name = "Horsepower") +
+  labs(title = "Vehicle Weight vs Fuel Efficiency",
+       x = "Weight (1000 lbs)",
+       y = "Miles per Gallon") +
+  theme_minimal()
+```
+
+The plot encodes four variables: weight (x-position), efficiency (y-position), cylinder count (colour), and horsepower (size).
+
+## Scales and Transformations
+
+Scales map data values to visual values. Transformations reshape the mathematical relationship.
+
+```{r}
+library(gapminder)
+
+# Linear vs log scale example
+p1 <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(colour = "#377EB8") +
+  scale_x_continuous(name = "GDP per capita (USD)") +
+  labs(title = "Linear Scale") +
+  theme_minimal()
+
+p2 <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(colour = "#377EB8") +
+  scale_x_log10(name = "GDP per capita (USD, log scale)") +
+  labs(title = "Log Scale") +
+  theme_minimal()
+
+library(patchwork)
+p1 | p2
+```
+
+The log scale reveals patterns at lower incomes that linear scale compresses.
+
+## Geometries: Data Representation
+
+Different geometries show different aspects of data.
+
+```{r}
+# Multiple geometries on same data
+p1 <- ggplot(gapminder %>% filter(year == 2007), 
+             aes(x = continent, y = lifeExp)) +
+  geom_boxplot() +
+  labs(title = "Boxplot: Distribution Summary",
+       x = "Continent", y = "Life Expectancy") +
+  theme_minimal()
+
+p2 <- ggplot(gapminder %>% filter(year == 2007), 
+             aes(x = continent, y = lifeExp)) +
+  geom_violin() +
+  labs(title = "Violin: Full Density Shape",
+       x = "Continent", y = "Life Expectancy") +
+  theme_minimal()
+
+p1 | p2
+```
+
+Boxplots show quartiles and whiskers. Violin plots show complete density shapes.
+
+## Coordinates: Spatial Arrangement
+
+Different coordinate systems reveal different patterns.
+
+```{r}
+# Cartesian vs Polar example
+p1 <- ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +
+  geom_bar() +
+  scale_fill_brewer(palette = "Set1") +
+  labs(title = "Cartesian Coordinates",
+       x = "Cylinders", fill = "Transmission") +
+  coord_cartesian() +
+  theme_minimal()
+
+p2 <- ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +
+  geom_bar() +
+  scale_fill_brewer(palette = "Set1") +
+  labs(title = "Polar Coordinates",
+       x = "Cylinders", fill = "Transmission") +
+  coord_polar() +
+  theme_minimal()
+
+p1 | p2
+```
+
+Polar coordinates emphasise circular patterns while Cartesian shows linear relationships clearly.
+
+## Guides and Facets
+
+Guides (axes, legends, titles) enable interpretation. Facets create multiple panels for comparison.
+
+```{r}
+# Faceting example
+ggplot(gapminder %>% filter(continent %in% c("Africa", "Europe", "Asia")), 
+       aes(x = gdpPercap, y = lifeExp, colour = continent)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_wrap(~continent) +
+  scale_x_log10() +
+  scale_colour_brewer(palette = "Set1") +
+  labs(title = "Life Expectancy vs GDP by Continent",
+       x = "GDP per capita (USD, log scale)",
+       y = "Life Expectancy (years)") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+Faceting creates separate panels for each continent, enabling direct comparison.
+
+## How Components Combine
+
+All components combine through consistent rules to create arbitrarily complex graphics.
+
+```{r}
+# Complex graphic combining multiple components
+ggplot(gapminder %>% filter(year %in% c(1952, 2007)), 
+       aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point(alpha = 0.6) +
+  scale_x_log10(name = "GDP per capita (USD, log scale)") +
+  scale_y_continuous(name = "Life Expectancy (years)") +
+  scale_size_continuous(name = "Population",
+                       range = c(1, 10)) +
+  scale_colour_brewer(palette = "Set1", name = "Continent") +
+  facet_wrap(~year) +
+  labs(title = "Global Development Change (1952-2007)",
+       subtitle = "Economic growth and health improvements across 55 years") +
+  theme_minimal()
+```
+
+This complex graphic combines aesthetics (position, size, colour), geometries (points), scales (log and linear), facets (by year), and guides (legends and labels).
+
+## Perceptual Effectiveness
+
+Research shows position is most accurate for human perception, followed by length, direction, area, and colour [@wilke2019fundamentals]. Critical comparisons should use position on axes. Secondary information can use colour or size.
+
+The flexibility of the grammar lies in independent specification of components [@wickham2016ggplot2]. Changing one component (like scale) transforms the entire visualisation without modifying code elsewhere.
+
+## References
+
+::: {#refs}
+:::

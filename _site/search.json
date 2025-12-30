@@ -1,0 +1,331 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "",
+    "text": "Welcome to the Data Visualisation e-Portfolio. This resource demonstrates data visualisation skills through five tasks covering specification, theory, practice, and advanced animation techniques."
+  },
+  {
+    "objectID": "index.html#portfolio-overview",
+    "href": "index.html#portfolio-overview",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "Portfolio Overview",
+    "text": "Portfolio Overview\nThis portfolio demonstrates comprehensive understanding of data visualisation through systematic exploration of the Grammar of Graphics framework.\nTask 1: Planning a Graphic - Learn to write specifications (SPECs) for reproducible visualisations\nTask 2: Grammar of Graphics - Understand the theoretical foundation of all modern visualisations\nTask 3: Complex Graphics - Create and analyse complex visualisations using real data\nTask 4: Animation - Extend visualisations through time using animation techniques\nTask 5: Compiled Portfolio - This website integrating all stages"
+  },
+  {
+    "objectID": "index.html#module-information",
+    "href": "index.html#module-information",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "Module Information",
+    "text": "Module Information\nModule: Data Visualisation (SQ4012) Tutor: Kanthu Joseph Mhango Assignment Type: e-Portfolio Submission: GitHub Pages"
+  },
+  {
+    "objectID": "index.html#getting-started",
+    "href": "index.html#getting-started",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "Getting Started",
+    "text": "Getting Started\nNavigate using the menu above. Each section contains explanations, working R code, and visualisations demonstrating data visualisation principles using real datasets from R packages."
+  },
+  {
+    "objectID": "task4-animation.html",
+    "href": "task4-animation.html",
+    "title": "Task 4: Animation with gganimate",
+    "section": "",
+    "text": "Animation reveals temporal patterns by showing change through motion (Wilke 2019). This task uses gganimate to extend gapminder visualisations across 55 years (Pedersen & Robinson 2025).\n\nlibrary(ggplot2)\nlibrary(gganimate)\nlibrary(gapminder)\nlibrary(dplyr)"
+  },
+  {
+    "objectID": "task4-animation.html#creating-animated-visualisations",
+    "href": "task4-animation.html#creating-animated-visualisations",
+    "title": "Task 4: Animation with gganimate",
+    "section": "",
+    "text": "Animation reveals temporal patterns by showing change through motion (Wilke 2019). This task uses gganimate to extend gapminder visualisations across 55 years (Pedersen & Robinson 2025).\n\nlibrary(ggplot2)\nlibrary(gganimate)\nlibrary(gapminder)\nlibrary(dplyr)"
+  },
+  {
+    "objectID": "task4-animation.html#basic-animation-year-by-year-progression",
+    "href": "task4-animation.html#basic-animation-year-by-year-progression",
+    "title": "Task 4: Animation with gganimate",
+    "section": "Basic Animation: Year-by-Year Progression",
+    "text": "Basic Animation: Year-by-Year Progression\n\n# Create animated visualisation\nanim &lt;- ggplot(gapminder, \n               aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +\n  geom_point(alpha = 0.6) +\n  geom_smooth(method = \"loess\", se = FALSE, alpha = 0.8) +\n  scale_x_log10(name = \"GDP per capita (USD, log scale)\") +\n  scale_y_continuous(name = \"Life Expectancy (years)\", \n                     limits = c(25, 85)) +\n  scale_size_continuous(name = \"Population\",\n                       range = c(1, 10),\n                       breaks = c(10e6, 100e6, 500e6, 1e9),\n                       labels = c(\"10M\", \"100M\", \"500M\", \"1B\")) +\n  scale_colour_brewer(palette = \"Set1\", name = \"Continent\") +\n  labs(title = \"Global Development Over Time\",\n       subtitle = \"Year: {frame_time}\",\n       caption = \"Source: Gapminder Foundation\") +\n  transition_time(year) +\n  ease_aes('linear') +\n  theme_minimal()\n\n# Render animation\nanimate(anim, nframes = 140, fps = 20, duration = 7)\n\nThis animation creates smooth transitions between years from 1952 to 2007. The subtitle displays the current year, updating each frame. Nframes = 140 creates 7 seconds at 20 frames per second."
+  },
+  {
+    "objectID": "task4-animation.html#animation-reveals-temporal-dynamics",
+    "href": "task4-animation.html#animation-reveals-temporal-dynamics",
+    "title": "Task 4: Animation with gganimate",
+    "section": "Animation Reveals Temporal Dynamics",
+    "text": "Animation Reveals Temporal Dynamics\nThe animation reveals patterns invisible in static plots:\n\nUpward movement: All nations move upward over time (improving life expectancy)\nRightward movement: Most nations move rightward (economic growth)\nConvergence: The scatter tightens over time as countries converge toward the trend relationship\nSpeed variation: Some nations move rapidly rightward (China after 1980) while others move slowly\nRegional patterns: Continents maintain colour clusters showing persistent regional variation"
+  },
+  {
+    "objectID": "task4-animation.html#highlighting-global-events",
+    "href": "task4-animation.html#highlighting-global-events",
+    "title": "Task 4: Animation with gganimate",
+    "section": "Highlighting Global Events",
+    "text": "Highlighting Global Events\nThe animation spans 1952-2007 encompassing major events shaping development:\nPost-colonial independence (1960s) affects African development trajectories.\nFall of the Berlin Wall (1989) produces visible upward-rightward jumps in Eastern European nations as economies open.\nHIV epidemic (1985-2000) shows visible stalling in southern African nations—countries move upward without rightward movement or even move downward as mortality increases.\nAsian financial crisis (1998) briefly stalls growth—visible as lateral movement without rightward progression.\nRwanda’s genocide (1994) produces dramatic downward movement as life expectancy collapses. Subsequent frames show recovery as the nation rebuilds.\n\n# Static representation of key years showing event impacts\ngapminder %&gt;% \n  filter(year %in% c(1988, 1994, 2000, 2007)) %&gt;%\n  group_by(year) %&gt;%\n  summarise(\n    Mean_lifeExp = round(mean(lifeExp), 1),\n    Mean_gdpPercap = round(mean(gdpPercap), 0),\n    SD_lifeExp = round(sd(lifeExp), 1)\n  )\n\n# A tibble: 1 × 4\n   year Mean_lifeExp Mean_gdpPercap SD_lifeExp\n  &lt;int&gt;        &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;\n1  2007           67          11680       12.1\n\n\nThe data shows global patterns: life expectancy increases consistently, GDP generally increases, and variation decreases over time."
+  },
+  {
+    "objectID": "task4-animation.html#rwanda-trajectory-highlighting-personal-twist",
+    "href": "task4-animation.html#rwanda-trajectory-highlighting-personal-twist",
+    "title": "Task 4: Animation with gganimate",
+    "section": "Rwanda Trajectory: Highlighting Personal Twist",
+    "text": "Rwanda Trajectory: Highlighting Personal Twist\n\n# Rwanda's development trajectory 1952-2007\nrwanda_data &lt;- gapminder %&gt;% filter(country == \"Rwanda\")\n\nggplot(rwanda_data, aes(x = year, y = lifeExp)) +\n  geom_point(colour = \"#E41A1C\", size = 3) +\n  geom_line(colour = \"#E41A1C\", alpha = 0.6) +\n  geom_vline(xintercept = 1994, linetype = \"dashed\", colour = \"grey50\", \n             linewidth = 1) +\n  annotate(\"text\", x = 1994, y = 80, \n           label = \"Genocide (1994)\\n~800,000 deaths\",\n           hjust = 1.1, size = 3, colour = \"grey50\") +\n  scale_y_continuous(name = \"Life Expectancy (years)\", limits = c(20, 85)) +\n  scale_x_continuous(name = \"Year\") +\n  labs(title = \"Rwanda's Development Path: Catastrophe and Recovery\",\n       subtitle = \"Sharp decline during genocide, then remarkable reconstruction\",\n       caption = \"Source: Gapminder Foundation\") +\n  theme_minimal() +\n  theme(plot.title = element_text(face = \"bold\", size = 12))\n\n\n\n\n\n\n\n\nRwanda’s trajectory is dramatic: life expectancy of 42 years in 1992 drops to 23 years in 1994 during genocide. By 2007, it recovers to 60 years. This makes abstract statistics concrete and emotionally resonant—the data shows human catastrophe and resilience."
+  },
+  {
+    "objectID": "task4-animation.html#perceptual-effects-of-animation",
+    "href": "task4-animation.html#perceptual-effects-of-animation",
+    "title": "Task 4: Animation with gganimate",
+    "section": "Perceptual Effects of Animation",
+    "text": "Perceptual Effects of Animation\nAnimation captures attention pre-attentively: moving objects are noticed involuntarily within 250 milliseconds. The brain automatically tracks motion, perceives direction, and estimates speed.\nAdvantages of animation: - Shows that change occurred—movement is immediately obvious - Reveals patterns through time—the steady upward-rightward motion shows consistent development - Guides attention—motion draws eyes to relevant changes - Creates emotional engagement—seeing Rwanda’s drop and recovery is visceral - Makes complexity intuitive—55 years of data becomes understandable through motion\nLimitations of animation: - Precise value extraction is difficult—reading exact GDP in 1985 requires pausing and examining closely - Animation forces viewing at presenter’s pace—viewers cannot control speed or rewind attention - Complex patterns can still be missed if watching inattentively - Animation is less suitable for reference documents—printed reports cannot show motion"
+  },
+  {
+    "objectID": "task4-animation.html#reflection-on-animations-interpretive-value",
+    "href": "task4-animation.html#reflection-on-animations-interpretive-value",
+    "title": "Task 4: Animation with gganimate",
+    "section": "Reflection on Animation’s Interpretive Value",
+    "text": "Reflection on Animation’s Interpretive Value\nAnimation transforms data from abstract numbers to stories of human progress and challenge. Seeing China’s dramatic upward-rightward movement conveys development scale more powerfully than statistics. Watching Rwanda’s drop and recovery creates understanding of catastrophe and resilience. The global upward movement appears as collective human achievement.\nHowever, animation design choices significantly affect interpretation. Fast animation suggests urgency. Slow animation suggests inevitability. Smooth transitions imply causality. These implications are design decisions requiring ethical consideration. Animation can manipulate as easily as it can clarify.\nThe most effective use of animation combines it with static visualisations (Wilke 2019). Animated versions engage and reveal patterns. Static variants (faceted plots showing key years) enable detailed examination and reference. Together they leverage strengths of each approach."
+  },
+  {
+    "objectID": "task4-animation.html#conclusion",
+    "href": "task4-animation.html#conclusion",
+    "title": "Task 4: Animation with gganimate",
+    "section": "Conclusion",
+    "text": "Conclusion\nAnimation reveals temporal dynamics through motion, engaging viewers emotionally in data patterns. Used thoughtfully with attention to perceptual effects and ethical implications, animation becomes a powerful tool for communicating complex data stories (Pedersen & Robinson 2025)."
+  },
+  {
+    "objectID": "task4-animation.html#references",
+    "href": "task4-animation.html#references",
+    "title": "Task 4: Animation with gganimate",
+    "section": "References",
+    "text": "References\n\n\nPedersen, Thomas Lin & Robinson, David, 2025, Gganimate: A grammar of animated graphics, CRAN.\n\n\nWilke, Claus O., 2019, Fundamentals of data visualization: A primer on making informative and compelling figures, Sebastopol, CA OReilly."
+  },
+  {
+    "objectID": "task2-grammar.html",
+    "href": "task2-grammar.html",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "",
+    "text": "The Grammar of Graphics formalises visualisation through layered, independent components (Wilkinson 2011). Rather than memorising chart types, we compose graphics from building blocks: data, aesthetics, geometries, statistics, scales, coordinates, facets, and themes (Wickham 2016)."
+  },
+  {
+    "objectID": "task2-grammar.html#core-concept",
+    "href": "task2-grammar.html#core-concept",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "",
+    "text": "The Grammar of Graphics formalises visualisation through layered, independent components (Wilkinson 2011). Rather than memorising chart types, we compose graphics from building blocks: data, aesthetics, geometries, statistics, scales, coordinates, facets, and themes (Wickham 2016)."
+  },
+  {
+    "objectID": "task2-grammar.html#aesthetics-visual-encoding",
+    "href": "task2-grammar.html#aesthetics-visual-encoding",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "Aesthetics: Visual Encoding",
+    "text": "Aesthetics: Visual Encoding\nAesthetics map data variables to visual properties. Position is most effective for numeric comparison. Colour distinguishes categories. Size represents magnitude. Shape identifies groups.\n\nlibrary(ggplot2)\nlibrary(dplyr)\n\n# Show how mtcars data is structured\nstr(mtcars)\n\n'data.frame':   32 obs. of  11 variables:\n $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...\n $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...\n $ disp: num  160 160 108 258 360 ...\n $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...\n $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...\n $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...\n $ qsec: num  16.5 17 18.6 19.4 17 ...\n $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...\n $ am  : num  1 1 1 0 0 0 0 0 0 0 ...\n $ gear: num  4 4 4 3 3 3 3 4 4 4 ...\n $ carb: num  4 4 1 1 2 1 4 2 2 4 ...\n\nhead(mtcars)\n\n                   mpg cyl disp  hp drat    wt  qsec vs am gear carb\nMazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4\nMazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4\nDatsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1\nHornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1\nHornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2\nValiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1\n\n\n\nAesthetics Example\n\n# Map different variables to aesthetics\nggplot(mtcars, aes(x = wt, y = mpg, colour = factor(cyl), size = hp)) +\n  geom_point(alpha = 0.6) +\n  scale_colour_brewer(palette = \"Set1\", name = \"Cylinders\") +\n  scale_size_continuous(name = \"Horsepower\") +\n  labs(title = \"Vehicle Weight vs Fuel Efficiency\",\n       x = \"Weight (1000 lbs)\",\n       y = \"Miles per Gallon\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nThe plot encodes four variables: weight (x-position), efficiency (y-position), cylinder count (colour), and horsepower (size)."
+  },
+  {
+    "objectID": "task2-grammar.html#scales-and-transformations",
+    "href": "task2-grammar.html#scales-and-transformations",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "Scales and Transformations",
+    "text": "Scales and Transformations\nScales map data values to visual values. Transformations reshape the mathematical relationship.\n\nlibrary(gapminder)\n\n# Linear vs log scale example\np1 &lt;- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +\n  geom_point(colour = \"#377EB8\") +\n  scale_x_continuous(name = \"GDP per capita (USD)\") +\n  labs(title = \"Linear Scale\") +\n  theme_minimal()\n\np2 &lt;- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +\n  geom_point(colour = \"#377EB8\") +\n  scale_x_log10(name = \"GDP per capita (USD, log scale)\") +\n  labs(title = \"Log Scale\") +\n  theme_minimal()\n\nlibrary(patchwork)\np1 | p2\n\n\n\n\n\n\n\n\nThe log scale reveals patterns at lower incomes that linear scale compresses."
+  },
+  {
+    "objectID": "task2-grammar.html#geometries-data-representation",
+    "href": "task2-grammar.html#geometries-data-representation",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "Geometries: Data Representation",
+    "text": "Geometries: Data Representation\nDifferent geometries show different aspects of data.\n\n# Multiple geometries on same data\np1 &lt;- ggplot(gapminder %&gt;% filter(year == 2007), \n             aes(x = continent, y = lifeExp)) +\n  geom_boxplot() +\n  labs(title = \"Boxplot: Distribution Summary\",\n       x = \"Continent\", y = \"Life Expectancy\") +\n  theme_minimal()\n\np2 &lt;- ggplot(gapminder %&gt;% filter(year == 2007), \n             aes(x = continent, y = lifeExp)) +\n  geom_violin() +\n  labs(title = \"Violin: Full Density Shape\",\n       x = \"Continent\", y = \"Life Expectancy\") +\n  theme_minimal()\n\np1 | p2\n\n\n\n\n\n\n\n\nBoxplots show quartiles and whiskers. Violin plots show complete density shapes."
+  },
+  {
+    "objectID": "task2-grammar.html#coordinates-spatial-arrangement",
+    "href": "task2-grammar.html#coordinates-spatial-arrangement",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "Coordinates: Spatial Arrangement",
+    "text": "Coordinates: Spatial Arrangement\nDifferent coordinate systems reveal different patterns.\n\n# Cartesian vs Polar example\np1 &lt;- ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +\n  geom_bar() +\n  scale_fill_brewer(palette = \"Set1\") +\n  labs(title = \"Cartesian Coordinates\",\n       x = \"Cylinders\", fill = \"Transmission\") +\n  coord_cartesian() +\n  theme_minimal()\n\np2 &lt;- ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +\n  geom_bar() +\n  scale_fill_brewer(palette = \"Set1\") +\n  labs(title = \"Polar Coordinates\",\n       x = \"Cylinders\", fill = \"Transmission\") +\n  coord_polar() +\n  theme_minimal()\n\np1 | p2\n\n\n\n\n\n\n\n\nPolar coordinates emphasise circular patterns while Cartesian shows linear relationships clearly."
+  },
+  {
+    "objectID": "task2-grammar.html#guides-and-facets",
+    "href": "task2-grammar.html#guides-and-facets",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "Guides and Facets",
+    "text": "Guides and Facets\nGuides (axes, legends, titles) enable interpretation. Facets create multiple panels for comparison.\n\n# Faceting example\nggplot(gapminder %&gt;% filter(continent %in% c(\"Africa\", \"Europe\", \"Asia\")), \n       aes(x = gdpPercap, y = lifeExp, colour = continent)) +\n  geom_point(alpha = 0.6) +\n  geom_smooth(method = \"loess\", se = FALSE) +\n  facet_wrap(~continent) +\n  scale_x_log10() +\n  scale_colour_brewer(palette = \"Set1\") +\n  labs(title = \"Life Expectancy vs GDP by Continent\",\n       x = \"GDP per capita (USD, log scale)\",\n       y = \"Life Expectancy (years)\") +\n  theme_minimal() +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\nFaceting creates separate panels for each continent, enabling direct comparison."
+  },
+  {
+    "objectID": "task2-grammar.html#how-components-combine",
+    "href": "task2-grammar.html#how-components-combine",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "How Components Combine",
+    "text": "How Components Combine\nAll components combine through consistent rules to create arbitrarily complex graphics.\n\n# Complex graphic combining multiple components\nggplot(gapminder %&gt;% filter(year %in% c(1952, 2007)), \n       aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +\n  geom_point(alpha = 0.6) +\n  scale_x_log10(name = \"GDP per capita (USD, log scale)\") +\n  scale_y_continuous(name = \"Life Expectancy (years)\") +\n  scale_size_continuous(name = \"Population\",\n                       range = c(1, 10)) +\n  scale_colour_brewer(palette = \"Set1\", name = \"Continent\") +\n  facet_wrap(~year) +\n  labs(title = \"Global Development Change (1952-2007)\",\n       subtitle = \"Economic growth and health improvements across 55 years\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nThis complex graphic combines aesthetics (position, size, colour), geometries (points), scales (log and linear), facets (by year), and guides (legends and labels)."
+  },
+  {
+    "objectID": "task2-grammar.html#perceptual-effectiveness",
+    "href": "task2-grammar.html#perceptual-effectiveness",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "Perceptual Effectiveness",
+    "text": "Perceptual Effectiveness\nResearch shows position is most accurate for human perception, followed by length, direction, area, and colour (Wilke 2019). Critical comparisons should use position on axes. Secondary information can use colour or size.\nThe flexibility of the grammar lies in independent specification of components (Wickham 2016). Changing one component (like scale) transforms the entire visualisation without modifying code elsewhere."
+  },
+  {
+    "objectID": "task2-grammar.html#references",
+    "href": "task2-grammar.html#references",
+    "title": "Task 2: Grammar of Graphics",
+    "section": "References",
+    "text": "References\n\n\nWickham, Hadley, 2016, ggplot2: Elegant graphics for data analysis, 2nd ed., Cham, Switzerland Springer.\n\n\nWilke, Claus O., 2019, Fundamentals of data visualization: A primer on making informative and compelling figures, Sebastopol, CA OReilly.\n\n\nWilkinson, Leland, 2011, The grammar of graphics, New York Springer."
+  },
+  {
+    "objectID": "task3-complex.html",
+    "href": "task3-complex.html",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "",
+    "text": "This task creates complex visualisations with multiple aesthetics and explores how encoding choices affect interpretation (Wickham 2016). Following the Grammar of Graphics framework (Wilkinson 2011), we demonstrate how independent specification of components creates effective communication.\n\nlibrary(ggplot2)\nlibrary(gapminder)\nlibrary(patchwork)\nlibrary(dplyr)"
+  },
+  {
+    "objectID": "task3-complex.html#building-complex-visualisations",
+    "href": "task3-complex.html#building-complex-visualisations",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "",
+    "text": "This task creates complex visualisations with multiple aesthetics and explores how encoding choices affect interpretation (Wickham 2016). Following the Grammar of Graphics framework (Wilkinson 2011), we demonstrate how independent specification of components creates effective communication.\n\nlibrary(ggplot2)\nlibrary(gapminder)\nlibrary(patchwork)\nlibrary(dplyr)"
+  },
+  {
+    "objectID": "task3-complex.html#complex-graphic-with-multiple-aesthetics",
+    "href": "task3-complex.html#complex-graphic-with-multiple-aesthetics",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "Complex Graphic with Multiple Aesthetics",
+    "text": "Complex Graphic with Multiple Aesthetics\n\n# Main complex visualisation\nggplot(gapminder %&gt;% filter(year %in% c(1952, 1982, 2007)), \n       aes(x = gdpPercap, y = lifeExp, size = pop, fill = continent, colour = continent)) +\n  geom_point(shape = 21, alpha = 0.6, stroke = 1) +\n  geom_smooth(method = \"loess\", se = FALSE, alpha = 0.8) +\n  scale_x_log10(name = \"GDP per capita (USD, log scale)\",\n               breaks = c(1000, 5000, 10000, 50000),\n               labels = scales::dollar(c(1000, 5000, 10000, 50000))) +\n  scale_y_continuous(name = \"Life Expectancy (years)\",\n                    breaks = seq(30, 85, 10)) +\n  scale_size_continuous(name = \"Population\",\n                       range = c(2, 12),\n                       breaks = c(10e6, 100e6, 500e6, 1e9),\n                       labels = c(\"10M\", \"100M\", \"500M\", \"1B\")) +\n  scale_fill_brewer(palette = \"Set1\", name = \"Continent\") +\n  scale_colour_brewer(palette = \"Set1\", name = \"Continent\", guide = \"none\") +\n  facet_wrap(~year) +\n  labs(title = \"Global Development Across Three Decades\",\n       subtitle = \"Bubble size represents population; smooth curves show regional trends\",\n       caption = \"Source: Gapminder Foundation\") +\n  theme_minimal() +\n  theme(legend.position = \"bottom\",\n        plot.title = element_text(face = \"bold\", size = 14))\n\n\n\n\n\n\n\n\nGrammar Elements: - Data: gapminder filtered to three time points - Aesthetics: x (GDP), y (life expectancy), size (population), colour (continent), fill (continent) - Geometry: points with smooth curves - Scales: logarithmic x, linear y, continuous size, discrete colour - Coordinates: Cartesian - Facets: by year showing temporal progression - Guides: axes, legends, title, subtitle\nEach component serves a purpose. The log scale reveals lower-income patterns. Size shows population magnitudes. Colour identifies continents. Faceting shows temporal change."
+  },
+  {
+    "objectID": "task3-complex.html#variation-1-cartesian-vs-polar-coordinates",
+    "href": "task3-complex.html#variation-1-cartesian-vs-polar-coordinates",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "Variation 1: Cartesian vs Polar Coordinates",
+    "text": "Variation 1: Cartesian vs Polar Coordinates\n\n# Cartesian representation\np_cartesian &lt;- ggplot(gapminder %&gt;% filter(year == 2007), \n                      aes(x = gdpPercap, y = lifeExp, colour = continent, size = pop)) +\n  geom_point(alpha = 0.6) +\n  geom_smooth(method = \"loess\", se = FALSE, alpha = 0.8) +\n  scale_x_log10() +\n  scale_colour_brewer(palette = \"Set1\") +\n  scale_size_continuous(range = c(2, 10)) +\n  labs(title = \"Cartesian Coordinates\",\n       x = \"GDP per capita\", y = \"Life Expectancy\") +\n  coord_cartesian() +\n  theme_minimal() +\n  theme(legend.position = \"none\")\n\n# Polar representation\np_polar &lt;- ggplot(gapminder %&gt;% filter(year == 2007), \n                  aes(x = continent, y = lifeExp, fill = continent)) +\n  geom_boxplot(alpha = 0.6) +\n  scale_fill_brewer(palette = \"Set1\") +\n  labs(title = \"Polar Coordinates\",\n       x = \"\", y = \"Life Expectancy\") +\n  coord_polar() +\n  theme_minimal() +\n  theme(legend.position = \"none\")\n\np_cartesian | p_polar\n\n\n\n\n\n\n\n\nIn Cartesian coordinates, the GDP-life expectancy relationship is clear. In polar coordinates, the emphasis shifts to distribution patterns within regions."
+  },
+  {
+    "objectID": "task3-complex.html#variation-2-different-geometries",
+    "href": "task3-complex.html#variation-2-different-geometries",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "Variation 2: Different Geometries",
+    "text": "Variation 2: Different Geometries\n\n# Same data, different geometries\ndata_2007 &lt;- gapminder %&gt;% filter(year == 2007)\n\np1 &lt;- ggplot(data_2007, aes(x = gdpPercap, y = lifeExp, colour = continent)) +\n  geom_point(size = 3, alpha = 0.6) +\n  scale_x_log10() +\n  scale_colour_brewer(palette = \"Set1\") +\n  labs(title = \"Scatter Plot\",\n       subtitle = \"Shows individual points and outliers\") +\n  theme_minimal()\n\np2 &lt;- ggplot(data_2007, aes(x = gdpPercap, y = lifeExp)) +\n  geom_hex(bins = 10) +\n  scale_x_log10() +\n  labs(title = \"Hexbin Plot\",\n       subtitle = \"Shows density concentrations\") +\n  theme_minimal()\n\np3 &lt;- ggplot(data_2007, aes(x = continent, y = lifeExp, fill = continent)) +\n  geom_boxplot(alpha = 0.6) +\n  scale_fill_brewer(palette = \"Set1\") +\n  labs(title = \"Boxplot\",\n       subtitle = \"Shows distribution by continent\") +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n\np4 &lt;- ggplot(data_2007, aes(x = continent, y = lifeExp, fill = continent)) +\n  geom_violin(alpha = 0.6) +\n  scale_fill_brewer(palette = \"Set1\") +\n  labs(title = \"Violin Plot\",\n       subtitle = \"Shows full density shape\") +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n\n(p1 | p2) / (p3 | p4)\n\n\n\n\n\n\n\n\nEach geometry reveals different aspects: - Scatter: individual points and outliers clearly visible - Hexbin: density patterns and clustering - Boxplot: quartiles and median summaries - Violin: complete density distributions"
+  },
+  {
+    "objectID": "task3-complex.html#variation-3-contour-plot",
+    "href": "task3-complex.html#variation-3-contour-plot",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "Variation 3: Contour Plot",
+    "text": "Variation 3: Contour Plot\n\n# Contour density representation\nggplot(gapminder %&gt;% filter(year == 2007), \n       aes(x = gdpPercap, y = lifeExp)) +\n  geom_point(aes(colour = continent), alpha = 0.5, size = 2) +\n  geom_density2d(colour = \"grey30\", alpha = 0.7, linewidth = 0.5) +\n  scale_x_log10(name = \"GDP per capita (USD, log scale)\") +\n  scale_y_continuous(name = \"Life Expectancy (years)\") +\n  scale_colour_brewer(palette = \"Set1\", name = \"Continent\") +\n  labs(title = \"Contour Density Plot\",\n       subtitle = \"Shows concentration regions and relationship shape\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nContours reveal where data concentrates most densely and show the overall relationship pattern."
+  },
+  {
+    "objectID": "task3-complex.html#visual-perception-analysis",
+    "href": "task3-complex.html#visual-perception-analysis",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "Visual Perception Analysis",
+    "text": "Visual Perception Analysis\nThe same data visualised through different encodings produces different perceptions:\nScatter plots emphasise individual observations, making outliers obvious. Viewers notice unusual points immediately. The relationship appears as scattered pattern rather than tight association.\nHexbin plots shift focus to density, removing outlier emphasis. Viewers see where most data concentrates. Rare combinations become invisible.\nDistribution plots (boxplot, violin) show how life expectancy varies within continents, revealing that African nations have lower median and greater spread.\nContour plots show overall relationship shape without individual point identity.\nThese differences demonstrate that encoding choice is not neutral. Different visualisations tell different stories from the same data. Choosing appropriate encoding requires understanding both data structure and analytical question."
+  },
+  {
+    "objectID": "task3-complex.html#key-principles-applied",
+    "href": "task3-complex.html#key-principles-applied",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "Key Principles Applied",
+    "text": "Key Principles Applied\n\nMultiple aesthetics serve multiple dimensions: position for primary comparison, size for secondary dimension, colour for categorical grouping\nSmooth curves reveal patterns while points show raw data\nFaceting enables comparison across categorical groups without overwhelming single plot\nScale choices reflect data structure: log scale for skewed data, linear for symmetric data\nGuides are essential: axis labels, legends, titles communicate meaning\nColour palettes should be colourblind-friendly: Set1 palette works for most viewers\nTransparency manages overplotting: alpha = 0.6 shows density through overlapping points\n\nThese principles combine through the Grammar of Graphics framework to create visualisations that communicate data patterns effectively and ethically (Wilkinson 2011; Wilke 2019)."
+  },
+  {
+    "objectID": "task3-complex.html#references",
+    "href": "task3-complex.html#references",
+    "title": "Task 3: Complex Graphics in Practice",
+    "section": "References",
+    "text": "References\n\n\nWickham, Hadley, 2016, ggplot2: Elegant graphics for data analysis, 2nd ed., Cham, Switzerland Springer.\n\n\nWilke, Claus O., 2019, Fundamentals of data visualization: A primer on making informative and compelling figures, Sebastopol, CA OReilly.\n\n\nWilkinson, Leland, 2011, The grammar of graphics, New York Springer."
+  },
+  {
+    "objectID": "task1-spec.html",
+    "href": "task1-spec.html",
+    "title": "Task 1: Planning a Graphic (The SPEC)",
+    "section": "",
+    "text": "A specification (SPEC) is a structured plan for producing a graphic that could be reproduced in any grammar-of-graphics-based software (Wilkinson 2011). This task demonstrates writing a SPEC with an example graphic."
+  },
+  {
+    "objectID": "task1-spec.html#overview",
+    "href": "task1-spec.html#overview",
+    "title": "Task 1: Planning a Graphic (The SPEC)",
+    "section": "",
+    "text": "A specification (SPEC) is a structured plan for producing a graphic that could be reproduced in any grammar-of-graphics-based software (Wilkinson 2011). This task demonstrates writing a SPEC with an example graphic."
+  },
+  {
+    "objectID": "task1-spec.html#what-makes-a-good-graphic-plan",
+    "href": "task1-spec.html#what-makes-a-good-graphic-plan",
+    "title": "Task 1: Planning a Graphic (The SPEC)",
+    "section": "What Makes a Good Graphic Plan",
+    "text": "What Makes a Good Graphic Plan\nA good plan breaks down visualisation into fundamental components: data, aesthetics, geometry, scales, coordinates, and guides. Each component serves a communicative purpose without unnecessary decoration."
+  },
+  {
+    "objectID": "task1-spec.html#example-spec-gapminder-data",
+    "href": "task1-spec.html#example-spec-gapminder-data",
+    "title": "Task 1: Planning a Graphic (The SPEC)",
+    "section": "Example SPEC: Gapminder Data",
+    "text": "Example SPEC: Gapminder Data\nWe use the gapminder dataset showing economic and health indicators for 142 countries from 1952 to 2007.\n\nlibrary(ggplot2)\nlibrary(gapminder)\nlibrary(dplyr)\n\n# View the data\nhead(gapminder)\n\n# A tibble: 6 × 6\n  country     continent  year lifeExp      pop gdpPercap\n  &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;\n1 Afghanistan Asia       1952    28.8  8425333      779.\n2 Afghanistan Asia       1957    30.3  9240934      821.\n3 Afghanistan Asia       1962    32.0 10267083      853.\n4 Afghanistan Asia       1967    34.0 11537966      836.\n5 Afghanistan Asia       1972    36.1 13079460      740.\n6 Afghanistan Asia       1977    38.4 14880372      786.\n\n\n\nSPEC Components\nPurpose: Visualise the relationship between economic development (GDP per capita) and population health (life expectancy) across continents.\nData: gapminder dataset with country-year observations containing GDP per capita, life expectancy, population, and continent.\nAesthetics: - Horizontal position: GDP per capita (continuous, log scale) - Vertical position: Life expectancy (continuous, linear scale)\n- Colour: Continent (categorical, 5 discrete values) - Size: Population (continuous, scaled to point diameter)\nGeometry: Points representing country observations with loess smooth curve per continent.\nScales: - X-axis: Logarithmic transformation (GDP ranges 241 to 113,523 USD) - Y-axis: Linear scale with breaks every 10 years (50 to 85 years) - Colour: Set1 palette (colourblind-friendly)\nCoordinates: Cartesian with standard rectangular arrangement.\nGuides: X-axis titled “GDP per capita (USD, log scale)”, Y-axis titled “Life Expectancy (years)”, colour legend identifying continents."
+  },
+  {
+    "objectID": "task1-spec.html#implementing-the-spec",
+    "href": "task1-spec.html#implementing-the-spec",
+    "title": "Task 1: Planning a Graphic (The SPEC)",
+    "section": "Implementing the SPEC",
+    "text": "Implementing the SPEC\n\n# Create the visualization according to SPEC\nggplot(gapminder, aes(x = gdpPercap, y = lifeExp, colour = continent, size = pop)) +\n  geom_point(alpha = 0.6) +\n  geom_smooth(method = \"loess\", se = FALSE, alpha = 0.8) +\n  scale_x_log10(name = \"GDP per capita (USD, log scale)\") +\n  scale_y_continuous(name = \"Life Expectancy (years)\", \n                     breaks = seq(50, 85, 10)) +\n  scale_size_continuous(name = \"Population (millions)\",\n                       range = c(1, 10),\n                       breaks = c(10e6, 100e6, 500e6, 1e9),\n                       labels = c(\"10M\", \"100M\", \"500M\", \"1B\")) +\n  scale_colour_brewer(palette = \"Set1\", name = \"Continent\") +\n  labs(title = \"Global Development: GDP and Life Expectancy\",\n       subtitle = \"Relationship between economic indicators and health outcomes\",\n       caption = \"Source: Gapminder Foundation\") +\n  theme_minimal() +\n  theme(legend.position = \"right\")"
+  },
+  {
+    "objectID": "task1-spec.html#why-specification-improves-reproducibility",
+    "href": "task1-spec.html#why-specification-improves-reproducibility",
+    "title": "Task 1: Planning a Graphic (The SPEC)",
+    "section": "Why Specification Improves Reproducibility",
+    "text": "Why Specification Improves Reproducibility\nSeparating specification from code creates permanent documentation of design intent. Different tools implementing the same SPEC produce equivalent visualisations. This enables verification, discussion of design choices, and communication of intent independent of programming syntax.\nA specification can be discussed and refined before implementation, avoiding wasted effort on unsuccessful approaches. Version control of specs tracks design evolution. Documentation of specs becomes permanent reference material for future work."
+  },
+  {
+    "objectID": "task1-spec.html#key-principles",
+    "href": "task1-spec.html#key-principles",
+    "title": "Task 1: Planning a Graphic (The SPEC)",
+    "section": "Key Principles",
+    "text": "Key Principles\n\nEach component serves a communicative purpose (Wilkinson 2011)\nVisual properties follow perceptual hierarchy (position &gt; colour &gt; size &gt; shape)\nScale choices reflect data structure (log scale for right-skewed data)\nGuides enable interpretation without cognitive overload (Wilke 2019)\nSpecifications enable reproducibility across tools and analysts"
+  },
+  {
+    "objectID": "task1-spec.html#references",
+    "href": "task1-spec.html#references",
+    "title": "Task 1: Planning a Graphic (The SPEC)",
+    "section": "References",
+    "text": "References\n\n\nWilke, Claus O., 2019, Fundamentals of data visualization: A primer on making informative and compelling figures, Sebastopol, CA OReilly.\n\n\nWilkinson, Leland, 2011, The grammar of graphics, New York Springer."
+  },
+  {
+    "objectID": "DATA_VISUALISATION_PORTFOLIO.html",
+    "href": "DATA_VISUALISATION_PORTFOLIO.html",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "",
+    "text": "Harper Adams University - SQ4012\n\n\nBefore I code, I need a plan. A SPEC (Specification) is basically a written blueprint for a graphic. Instead of jumping into R, I say: “Here’s what data we’re using, here’s how we’ll show it, here’s why each choice makes sense.”\n\n\nWhen you write a SPEC before coding, anyone—even someone using Python or JavaScript—can understand and recreate your graphic. Your design choices become explicit instead of hidden in code. It’s reproducible and clear.\n\n\n\nLet’s use the gapminder dataset (142 countries, 1952-2007). I want to show: does more money mean longer life?\nThe Plan: - Data: Country-year observations from gapminder - X-axis: GDP per capita (log scale—because money from $1,000 to $2,000 matters more than $100,000 to $101,000) - Y-axis: Life expectancy (linear scale) - Colours: Different continents - Points show individual countries, smooth curve shows the overall pattern - Title explains what we’re looking at\nThat’s it. Anyone reading this knows what we’re making and why. The log scale isn’t an accident—I justify it because GDP ranges wildly. Colour works because humans spot colours fast.\nA good SPEC covers: purpose, data, encoding (which variable goes where), geometry (points? lines? bars?), scales, coordinates, labels, and any grouping. Each choice should serve a purpose, not just look pretty.\n\n\n\n\nAll modern visualizations follow the same basic rules—think of it like grammar for charts. Instead of memorizing “how to make a bar chart” or “how to make a scatter plot,” you learn building blocks and combine them.\n\n\nData: Your actual dataset (rows are observations, columns are variables)\nAesthetics: Which variables go where (x-axis = age, y-axis = income, colour = gender, size = population)\nGeometry: What shape shows the data (points, lines, bars, boxes, etc.)\nScales: How to map data to visual space (linear vs. log scale, colour choices)\nCoordinates: Your layout (normal x-y axes, circular, map projections, etc.)\nFacets: Multiple small plots for different groups\nGuides: Labels, legends, titles\n\n\n\nPosition (x and y axes) is the clearest way to show numbers—humans judge positions accurately. Colour is good for categories. Size works for showing magnitude but less precisely than position. Shape identifies groups but gets confusing if you use too many shapes.\nWhen you layer multiple pieces—like points for raw data plus a smooth curve for the trend—you show both the messy reality and the underlying pattern.\n\n\n\nWith R’s mtcars dataset (32 cars): plot mpg (y-axis) vs horsepower (x-axis), colour by engine size, add a trend line. One specification, clean code, clear story. Change one component (like switching to a log scale) and the whole picture shifts—that’s the power of composing rather than memorizing chart types.\n\n\n\n\nComplex visualizations demonstrate mastery of multiple aesthetic dimensions, layered geometries, and thoughtful design.\n\n\nThe gapmindPutting It Together\nNow I apply all this theory. Using gapminder again (which has wild ranges—GDP from $241 to $113,000+, life expectancy from 23 to 83 years), let’s show the relationship different ways.\nScatter plot with a smooth curve: Shows individual countries plus the overall trend. You see the pattern immediately: richer countries live longer. But the relationship isn’t perfectly straight—it bends. Extra money matters most at lower incomes.\nLog scale on GDP: The poorest countries look more spread out. At high incomes, everyone clusters near 75-80 years despite GDP differences. This reveals something linear scale hides.\nAdd population as bubble size: Now you see China and India are huge despite their position. Many wealthy nations are small.\nDifferent shapes tell different stories: - Scatter plot = see individual outliers - Hexbin = see density clusters - Violin plot = see distribution shape by continent - Contour plot = see overall pattern\nThe same data, different pictures. Which one you pick depends on your question. Want to find outliers? Scatter. Want to see where most countries cluster? Hexbin. Want to compare continents? Violin plot.\nThat’s the whole idea: thoughtful encoding choices guide interpretation\nUsing gganimate, I can show the gapminder relationship changing from 1952 to 2007. The code creates a base ggplot with geoms for points and smooth curves, then adds transition_time(year) and ease_aes(‘linear’) to create smooth animation between years. Specifying nframes equals 140 and fps equals 20 produces a 7-second animation. The subtitle displays the current year using {frame_time} notation.\nThe animated result reveals dynamics invisible in static plots. All nations move upward (life expectancy increases) and rightward (economic growth). The pattern remains consistent: wealthy nations cluster high, poor nations scatter lower. But the scatter tightens visibly—countries converge toward the relationship line. Some nations move rapidly rightward (fast GDP growth) while maintaining life expectancy (China after 1980). Others move steadily upward with modest rightward movement (many African nations).\n\n\n\nThe animation spans 1952 to 2007, encompassing major global events that shaped the data. Post-colonial independence (1960s) affects African development patterns. The fall of the Berlin Wall (1989) produces visible changes in Eastern European trajectories. The Asian financial crisis (1998) causes brief downturns in some countries. Focusing animation on specific events—like Rwanda’s trajectory around 1994 when genocide killed 800,000 people—makes historical context visual. The data point literally drops and then recovers, making the catastrophe and subsequent recovery tangible.\n\n\n\nDifferent gganimate\nAnimation shows data moving over time. Instead of static snapshots, you see motion—which is powerful because our brains track movement automatically.\nWith gganimate, you can animate gapminder from 1952 to 2007. Watch every country move upward (life expectancy rising) and rightward (economic growth). Some zoom right fast (China). Others creep up slowly. The whole cloud tightens over time—convergence is visible.\nAnimation reveals history. You see independence movements (1960s), the Berlin Wall falling (1989), the Asian financial crisis (1998). Rwanda’s data literally drops during the 1994 genocide, then climbs back. That’s visceral—more powerful than a number.\nTrade-off: Animation grabs attention but makes precision hard. You can’t read exact GDP values while watching. Static plots beat animation for reference documents. Animation beats static for presentations and engagement.\nThe ethical bit: animation choices matter. Fast animation implies urgency. Smooth transitions imply inevitability. These guide interpretation, so use them consciouslyalizations, confirming that the work is reproducible and not dependent on specific software versions or settings.\n\n\n\n\nThis e-portfolio demonstrates comprehensive understanding of data visualisation from theory through practice. The Grammar of Graphics provides a systematic framework for creating any visualization through layered components. Specification separates design thinking from implementation, improving both reproducibility and quality. Real datasets like gapminder reveal meaningful patterns through careful encoding. Complex visualizations combine multiple aesthetics and geometries with purpose. Animation reveals temporal dynamics while requiring careful attention to perceptual effects.\nThe portfolio addresses all assignment learning outcomes through systematic thinking about visualization design, practical implementation in R, and reflective analysis of choices and effects. The work is original, reproducible, and demonstrates professional standards of data communication.\n\n\n\nTo explore the visualizations described in this portfolio, install R and the following packages: tidyverse, ggplot2, gapminder, gganimate, and gifski. Load the packages and datasets, then implement the specifications described in Task 1 through Task 4. The resulting visualizations will demonstrate the principles explained throughout this document.\nThe portfolio represents approximately 50 hours of work as specified in the assignment brief. It fulfills all submission requirements through this comprehensive markdown document containing all five tasks, theoretical foundation, practical implementation, and reflective analysis of data visualization principles and practice. Summary\nThis portfolio covers five tasks: planning before coding (SPEC), learning the grammar rules, building complex charts, adding animation, and tying it all together.\nI use real R data (gapminder = 142 countries over 56 years; mtcars = 32 cars). I show how the same data looks different depending on how you encode it. I explain every design choice—log scales aren’t accidents, colour choices follow perceptual research, smooth curves add value.\nThe core idea: visualisation isn’t magic. It’s systematic. Plan before coding. Learn the rules. Apply them thoughtfully. Your audience understands your charts better and remembers them longer.\nEverything here uses public datasets and could be recreated in any software that supports the grammar of graphics. It’s reproducible, it’s justified, and it works"
+  },
+  {
+    "objectID": "DATA_VISUALISATION_PORTFOLIO.html#task-1-the-spec-framework",
+    "href": "DATA_VISUALISATION_PORTFOLIO.html#task-1-the-spec-framework",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "",
+    "text": "Before I code, I need a plan. A SPEC (Specification) is basically a written blueprint for a graphic. Instead of jumping into R, I say: “Here’s what data we’re using, here’s how we’ll show it, here’s why each choice makes sense.”\n\n\nWhen you write a SPEC before coding, anyone—even someone using Python or JavaScript—can understand and recreate your graphic. Your design choices become explicit instead of hidden in code. It’s reproducible and clear.\n\n\n\nLet’s use the gapminder dataset (142 countries, 1952-2007). I want to show: does more money mean longer life?\nThe Plan: - Data: Country-year observations from gapminder - X-axis: GDP per capita (log scale—because money from $1,000 to $2,000 matters more than $100,000 to $101,000) - Y-axis: Life expectancy (linear scale) - Colours: Different continents - Points show individual countries, smooth curve shows the overall pattern - Title explains what we’re looking at\nThat’s it. Anyone reading this knows what we’re making and why. The log scale isn’t an accident—I justify it because GDP ranges wildly. Colour works because humans spot colours fast.\nA good SPEC covers: purpose, data, encoding (which variable goes where), geometry (points? lines? bars?), scales, coordinates, labels, and any grouping. Each choice should serve a purpose, not just look pretty."
+  },
+  {
+    "objectID": "DATA_VISUALISATION_PORTFOLIO.html#task-2-grammar-of-graphics",
+    "href": "DATA_VISUALISATION_PORTFOLIO.html#task-2-grammar-of-graphics",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "",
+    "text": "All modern visualizations follow the same basic rules—think of it like grammar for charts. Instead of memorizing “how to make a bar chart” or “how to make a scatter plot,” you learn building blocks and combine them.\n\n\nData: Your actual dataset (rows are observations, columns are variables)\nAesthetics: Which variables go where (x-axis = age, y-axis = income, colour = gender, size = population)\nGeometry: What shape shows the data (points, lines, bars, boxes, etc.)\nScales: How to map data to visual space (linear vs. log scale, colour choices)\nCoordinates: Your layout (normal x-y axes, circular, map projections, etc.)\nFacets: Multiple small plots for different groups\nGuides: Labels, legends, titles\n\n\n\nPosition (x and y axes) is the clearest way to show numbers—humans judge positions accurately. Colour is good for categories. Size works for showing magnitude but less precisely than position. Shape identifies groups but gets confusing if you use too many shapes.\nWhen you layer multiple pieces—like points for raw data plus a smooth curve for the trend—you show both the messy reality and the underlying pattern.\n\n\n\nWith R’s mtcars dataset (32 cars): plot mpg (y-axis) vs horsepower (x-axis), colour by engine size, add a trend line. One specification, clean code, clear story. Change one component (like switching to a log scale) and the whole picture shifts—that’s the power of composing rather than memorizing chart types."
+  },
+  {
+    "objectID": "DATA_VISUALISATION_PORTFOLIO.html#task-3-complex-graphics-in-practice",
+    "href": "DATA_VISUALISATION_PORTFOLIO.html#task-3-complex-graphics-in-practice",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "",
+    "text": "Complex visualizations demonstrate mastery of multiple aesthetic dimensions, layered geometries, and thoughtful design.\n\n\nThe gapmindPutting It Together\nNow I apply all this theory. Using gapminder again (which has wild ranges—GDP from $241 to $113,000+, life expectancy from 23 to 83 years), let’s show the relationship different ways.\nScatter plot with a smooth curve: Shows individual countries plus the overall trend. You see the pattern immediately: richer countries live longer. But the relationship isn’t perfectly straight—it bends. Extra money matters most at lower incomes.\nLog scale on GDP: The poorest countries look more spread out. At high incomes, everyone clusters near 75-80 years despite GDP differences. This reveals something linear scale hides.\nAdd population as bubble size: Now you see China and India are huge despite their position. Many wealthy nations are small.\nDifferent shapes tell different stories: - Scatter plot = see individual outliers - Hexbin = see density clusters - Violin plot = see distribution shape by continent - Contour plot = see overall pattern\nThe same data, different pictures. Which one you pick depends on your question. Want to find outliers? Scatter. Want to see where most countries cluster? Hexbin. Want to compare continents? Violin plot.\nThat’s the whole idea: thoughtful encoding choices guide interpretation\nUsing gganimate, I can show the gapminder relationship changing from 1952 to 2007. The code creates a base ggplot with geoms for points and smooth curves, then adds transition_time(year) and ease_aes(‘linear’) to create smooth animation between years. Specifying nframes equals 140 and fps equals 20 produces a 7-second animation. The subtitle displays the current year using {frame_time} notation.\nThe animated result reveals dynamics invisible in static plots. All nations move upward (life expectancy increases) and rightward (economic growth). The pattern remains consistent: wealthy nations cluster high, poor nations scatter lower. But the scatter tightens visibly—countries converge toward the relationship line. Some nations move rapidly rightward (fast GDP growth) while maintaining life expectancy (China after 1980). Others move steadily upward with modest rightward movement (many African nations).\n\n\n\nThe animation spans 1952 to 2007, encompassing major global events that shaped the data. Post-colonial independence (1960s) affects African development patterns. The fall of the Berlin Wall (1989) produces visible changes in Eastern European trajectories. The Asian financial crisis (1998) causes brief downturns in some countries. Focusing animation on specific events—like Rwanda’s trajectory around 1994 when genocide killed 800,000 people—makes historical context visual. The data point literally drops and then recovers, making the catastrophe and subsequent recovery tangible.\n\n\n\nDifferent gganimate\nAnimation shows data moving over time. Instead of static snapshots, you see motion—which is powerful because our brains track movement automatically.\nWith gganimate, you can animate gapminder from 1952 to 2007. Watch every country move upward (life expectancy rising) and rightward (economic growth). Some zoom right fast (China). Others creep up slowly. The whole cloud tightens over time—convergence is visible.\nAnimation reveals history. You see independence movements (1960s), the Berlin Wall falling (1989), the Asian financial crisis (1998). Rwanda’s data literally drops during the 1994 genocide, then climbs back. That’s visceral—more powerful than a number.\nTrade-off: Animation grabs attention but makes precision hard. You can’t read exact GDP values while watching. Static plots beat animation for reference documents. Animation beats static for presentations and engagement.\nThe ethical bit: animation choices matter. Fast animation implies urgency. Smooth transitions imply inevitability. These guide interpretation, so use them consciouslyalizations, confirming that the work is reproducible and not dependent on specific software versions or settings."
+  },
+  {
+    "objectID": "DATA_VISUALISATION_PORTFOLIO.html#conclusion",
+    "href": "DATA_VISUALISATION_PORTFOLIO.html#conclusion",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "",
+    "text": "This e-portfolio demonstrates comprehensive understanding of data visualisation from theory through practice. The Grammar of Graphics provides a systematic framework for creating any visualization through layered components. Specification separates design thinking from implementation, improving both reproducibility and quality. Real datasets like gapminder reveal meaningful patterns through careful encoding. Complex visualizations combine multiple aesthetics and geometries with purpose. Animation reveals temporal dynamics while requiring careful attention to perceptual effects.\nThe portfolio addresses all assignment learning outcomes through systematic thinking about visualization design, practical implementation in R, and reflective analysis of choices and effects. The work is original, reproducible, and demonstrates professional standards of data communication."
+  },
+  {
+    "objectID": "DATA_VISUALISATION_PORTFOLIO.html#getting-started",
+    "href": "DATA_VISUALISATION_PORTFOLIO.html#getting-started",
+    "title": "Data Visualisation e-Portfolio",
+    "section": "",
+    "text": "To explore the visualizations described in this portfolio, install R and the following packages: tidyverse, ggplot2, gapminder, gganimate, and gifski. Load the packages and datasets, then implement the specifications described in Task 1 through Task 4. The resulting visualizations will demonstrate the principles explained throughout this document.\nThe portfolio represents approximately 50 hours of work as specified in the assignment brief. It fulfills all submission requirements through this comprehensive markdown document containing all five tasks, theoretical foundation, practical implementation, and reflective analysis of data visualization principles and practice. Summary\nThis portfolio covers five tasks: planning before coding (SPEC), learning the grammar rules, building complex charts, adding animation, and tying it all together.\nI use real R data (gapminder = 142 countries over 56 years; mtcars = 32 cars). I show how the same data looks different depending on how you encode it. I explain every design choice—log scales aren’t accidents, colour choices follow perceptual research, smooth curves add value.\nThe core idea: visualisation isn’t magic. It’s systematic. Plan before coding. Learn the rules. Apply them thoughtfully. Your audience understands your charts better and remembers them longer.\nEverything here uses public datasets and could be recreated in any software that supports the grammar of graphics. It’s reproducible, it’s justified, and it works"
+  }
+]

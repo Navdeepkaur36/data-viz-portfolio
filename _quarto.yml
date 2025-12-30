@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Data Visualisation e-Portfolio"
+  navbar:
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "Task 1: SPEC"
+        file: task1-spec.qmd
+      - text: "Task 2: Grammar"
+        file: task2-grammar.qmd
+      - text: "Task 3: Complex Graphics"
+        file: task3-complex.qmd
+      - text: "Task 4: Animation"
+        file: task4-animation.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: false
+    bibliography: references.bib
+    csl: harvard.csl
+
+execute:
+  echo: true
+  eval: true
+  warning: false

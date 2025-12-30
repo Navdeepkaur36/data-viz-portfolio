@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" default-locale="en-US">
+  <info>
+    <title>Harvard</title>
+    <id>http://www.zotero.org/styles/harvard1</id>
+    <link href="http://www.zotero.org/styles/harvard1" rel="self"/>
+    <link href="http://libguides.reading.ac.uk/harvard" rel="documentation"/>
+    <author>
+      <name>Navdeepkaur36</name>
+      <email>navdeepkxur@gmail.com</email>
+    </author>
+    <category citation-format="author-date"/>
+    <category field="generic-base"/>
+    <updated>2013-03-28T19:34:48+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+  </info>
+  <locale xml:lang="en">
+    <date form="numeric">
+      <date-part name="day" form="numeric-leading-zeros" suffix="-"/>
+      <date-part name="month" form="numeric-leading-zeros" suffix="-"/>
+      <date-part name="year"/>
+    </date>
+  </locale>
+  <locale>
+    <terms>
+      <term name="et-al">et al.</term>
+      <term name="available at">available at</term>
+      <term name="presented at">presented at</term>
+    </terms>
+  </locale>
+  <macro name="editor">
+    <names variable="editor" delimiter=" ">
+      <label form="verb" text-case="lowercase" suffix=" "/>
+      <name and="symbol" delimiter=", "/>
+    </names>
+  </macro>
+  <macro name="anon">
+    <text term="anonymous" form="short" text-case="capitalize-first"/>
+  </macro>
+  <macro name="author">
+    <names variable="author">
+      <name name-as-sort-order="all" and="symbol" sort-separator=", " delimiter=", " delimiter-precedes-last="never"/>
+      <label form="short" prefix=" "/>
+      <substitute>
+        <names variable="editor"/>
+        <text macro="anon"/>
+      </substitute>
+    </names>
+  </macro>
+  <macro name="author-short">
+    <names variable="author">
+      <name form="short" and="symbol" delimiter=", " delimiter-precedes-last="never"/>
+      <substitute>
+        <names variable="editor"/>
+        <names variable="translator"/>
+        <text macro="anon"/>
+      </substitute>
+    </names>
+  </macro>
+  <macro name="access">
+    <choose>
+      <if variable="URL">
+        <group delimiter=", ">
+          <group prefix="[" suffix="]">
+            <text term="online"/>
+          </group>
+          <group delimiter=" ">
+            <text term="available at" suffix=":"/>
+            <text variable="URL"/>
+          </group>
+          <group delimiter=" ">
+            <text term="accessed"/>
+            <date variable="accessed" form="text"/>
+          </group>
+        </group>
+      </if>
+    </choose>
+  </macro>
+  <macro name="title">
+    <choose>
+      <if type="bill book graphic legal_case legislation motion_picture report song" match="any">
+        <text variable="title" font-style="italic"/>
+      </if>
+      <else>
+        <text variable="title"/>
+      </else>
+    </choose>
+  </macro>
+  <macro name="publisher">
+    <text variable="publisher-place"/>
+    <text variable="publisher" prefix=" "/>
+  </macro>
+  <macro name="year-date">
+    <choose>
+      <if variable="issued">
+        <date variable="issued">
+          <date-part name="year"/>
+        </date>
+      </if>
+      <else>
+        <text term="no date" form="short"/>
+      </else>
+    </choose>
+  </macro>
+  <macro name="edition">
+    <choose>
+      <if is-numeric="edition">
+        <group delimiter=" ">
+          <number variable="edition" form="ordinal"/>
+          <text term="edition" form="short"/>
+        </group>
+      </if>
+      <else>
+        <text variable="edition" suffix="."/>
+      </else>
+    </choose>
+  </macro>
+  <citation et-al-min="3" et-al-use-first="1" disambiguate-adds="year" collapse="year-suffix" cite-group-delimiter="; ">
+    <layout prefix="(" suffix=")" delimiter="; ">
+      <group delimiter=" ">
+        <group delimiter=" ">
+          <text macro="author-short"/>
+          <text macro="year-date"/>
+        </group>
+        <text variable="locator"/>
+      </group>
+    </layout>
+  </citation>
+  <bibliography et-al-min="4" et-al-use-first="1" hanging-indent="true" entry-spacing="0">
+    <sort>
+      <key macro="author"/>
+      <key variable="issued"/>
+    </sort>
+    <layout>
+      <group delimiter=", " suffix=".">
+        <text macro="author"/>
+        <text macro="year-date"/>
+        <text macro="title"/>
+        <choose>
+          <if type="bill book graphic legal_case legislation motion_picture report song" match="any">
+            <group delimiter=", " prefix=" ">
+              <text macro="edition"/>
+              <text macro="publisher"/>
+            </group>
+          </if>
+          <else-if type="chapter paper-conference" match="any">
+            <group delimiter=" ">
+              <text term="in"/>
+              <text variable="container-title" font-style="italic"/>
+            </group>
+            <group delimiter=", " prefix=" ">
+              <text macro="editor"/>
+              <text macro="publisher"/>
+            </group>
+            <group prefix=" " delimiter=" ">
+              <text term="page" form="short"/>
+              <text variable="page"/>
+            </group>
+          </else-if>
+          <else>
+            <text variable="container-title" font-style="italic"/>
+            <group delimiter=" ">
+              <text variable="volume" font-weight="bold"/>
+              <text variable="issue" prefix="(" suffix=")"/>
+            </group>
+            <text variable="page"/>
+          </else>
+        </choose>
+      </group>
+      <text macro="access" prefix=" "/>
+    </layout>
+  </bibliography>
+</style>

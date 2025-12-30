@@ -1,0 +1,31 @@
+---
+title: "Data Visualisation e-Portfolio"
+subtitle: "Harper Adams University - SQ4012"
+---
+
+Welcome to the Data Visualisation e-Portfolio. This resource demonstrates data visualisation skills through five tasks covering specification, theory, practice, and advanced animation techniques.
+
+## Portfolio Overview
+
+This portfolio demonstrates comprehensive understanding of data visualisation through systematic exploration of the Grammar of Graphics framework.
+
+**Task 1: Planning a Graphic** - Learn to write specifications (SPECs) for reproducible visualisations
+
+**Task 2: Grammar of Graphics** - Understand the theoretical foundation of all modern visualisations
+
+**Task 3: Complex Graphics** - Create and analyse complex visualisations using real data
+
+**Task 4: Animation** - Extend visualisations through time using animation techniques
+
+**Task 5: Compiled Portfolio** - This website integrating all stages
+
+## Module Information
+
+Module: Data Visualisation (SQ4012)
+Tutor: Kanthu Joseph Mhango
+Assignment Type: e-Portfolio
+Submission: GitHub Pages
+
+## Getting Started
+
+Navigate using the menu above. Each section contains explanations, working R code, and visualisations demonstrating data visualisation principles using real datasets from R packages.

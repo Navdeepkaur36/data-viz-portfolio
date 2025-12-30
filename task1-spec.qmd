@@ -1,0 +1,88 @@
+---
+title: "Task 1: Planning a Graphic (The SPEC)"
+---
+
+## Overview
+
+A specification (SPEC) is a structured plan for producing a graphic that could be reproduced in any grammar-of-graphics-based software [@wilkinson2011grammar]. This task demonstrates writing a SPEC with an example graphic.
+
+## What Makes a Good Graphic Plan
+
+A good plan breaks down visualisation into fundamental components: data, aesthetics, geometry, scales, coordinates, and guides. Each component serves a communicative purpose without unnecessary decoration.
+
+## Example SPEC: Gapminder Data
+
+We use the gapminder dataset showing economic and health indicators for 142 countries from 1952 to 2007.
+
+```{r}
+library(ggplot2)
+library(gapminder)
+library(dplyr)
+
+# View the data
+head(gapminder)
+```
+
+### SPEC Components
+
+**Purpose**: Visualise the relationship between economic development (GDP per capita) and population health (life expectancy) across continents.
+
+**Data**: gapminder dataset with country-year observations containing GDP per capita, life expectancy, population, and continent.
+
+**Aesthetics**:
+- Horizontal position: GDP per capita (continuous, log scale)
+- Vertical position: Life expectancy (continuous, linear scale)  
+- Colour: Continent (categorical, 5 discrete values)
+- Size: Population (continuous, scaled to point diameter)
+
+**Geometry**: Points representing country observations with loess smooth curve per continent.
+
+**Scales**: 
+- X-axis: Logarithmic transformation (GDP ranges 241 to 113,523 USD)
+- Y-axis: Linear scale with breaks every 10 years (50 to 85 years)
+- Colour: Set1 palette (colourblind-friendly)
+
+**Coordinates**: Cartesian with standard rectangular arrangement.
+
+**Guides**: X-axis titled "GDP per capita (USD, log scale)", Y-axis titled "Life Expectancy (years)", colour legend identifying continents.
+
+## Implementing the SPEC
+
+```{r}
+# Create the visualization according to SPEC
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, colour = continent, size = pop)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "loess", se = FALSE, alpha = 0.8) +
+  scale_x_log10(name = "GDP per capita (USD, log scale)") +
+  scale_y_continuous(name = "Life Expectancy (years)", 
+                     breaks = seq(50, 85, 10)) +
+  scale_size_continuous(name = "Population (millions)",
+                       range = c(1, 10),
+                       breaks = c(10e6, 100e6, 500e6, 1e9),
+                       labels = c("10M", "100M", "500M", "1B")) +
+  scale_colour_brewer(palette = "Set1", name = "Continent") +
+  labs(title = "Global Development: GDP and Life Expectancy",
+       subtitle = "Relationship between economic indicators and health outcomes",
+       caption = "Source: Gapminder Foundation") +
+  theme_minimal() +
+  theme(legend.position = "right")
+```
+
+## Why Specification Improves Reproducibility
+
+Separating specification from code creates permanent documentation of design intent. Different tools implementing the same SPEC produce equivalent visualisations. This enables verification, discussion of design choices, and communication of intent independent of programming syntax.
+
+A specification can be discussed and refined before implementation, avoiding wasted effort on unsuccessful approaches. Version control of specs tracks design evolution. Documentation of specs becomes permanent reference material for future work.
+
+## Key Principles
+
+- Each component serves a communicative purpose [@wilkinson2011grammar]
+- Visual properties follow perceptual hierarchy (position > colour > size > shape)
+- Scale choices reflect data structure (log scale for right-skewed data)
+- Guides enable interpretation without cognitive overload [@wilke2019fundamentals]
+- Specifications enable reproducibility across tools and analysts
+
+## References
+
+::: {#refs}
+:::
